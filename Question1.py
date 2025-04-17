@@ -1,8 +1,23 @@
 from collections.abc import Sequence
 from math import factorial
-from math import pow
+from math import pow, sqrt, erf
+from math import pi as Pi
 
 
+def prob_rain_more_than_n_normal_aprox(p: Sequence[float], n: int)->float:
+    result = 0.0
+   
+    #Assuming a normal distribution of the days it rains, this should still hold
+    #barring the case where there are no extreme outliers or additional weights 
+    #(which is not the case in rainy days in vancouver, it rains a lot anyways)
+
+    u = sum(p)
+    variance = sum(Pi * (1 - Pi) for Pi in p)
+    sigma = sqrt(variance)
+    z = (n + 0.5 - u)/ sigma
+    result = 1- (0.5*erf(z/sqrt(2)))
+
+    return result
 
 def prob_rain_more_than_n(p: Sequence[float], n: int)->float:
     #First we need to determine all the possibilities in which n can be satisfied
@@ -25,5 +40,6 @@ def prob_rain_more_than_n(p: Sequence[float], n: int)->float:
 
     return result
 
+ 
 
 #Creating a 365 array of probabilities of rain for Vancouver
