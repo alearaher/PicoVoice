@@ -2,6 +2,7 @@ from collections.abc import Sequence
 from math import factorial
 from math import pow, sqrt, erf
 from math import pi as Pi
+import random
 
 
 def prob_rain_more_than_n_normal_aprox(p: Sequence[float], n: int)->float:
@@ -13,9 +14,10 @@ def prob_rain_more_than_n_normal_aprox(p: Sequence[float], n: int)->float:
 
     u = sum(p)
     variance = sum(Pi * (1 - Pi) for Pi in p)
+    print(variance)
     sigma = sqrt(variance)
-    z = (n + 0.5 - u)/ sigma
-    result = 1- (0.5*erf(z/sqrt(2)))
+    z = (n + 0.5 - u)/sigma
+    result = 1.0 - (0.5*erf(z/sqrt(2)))
 
     return result
 
@@ -43,3 +45,7 @@ def prob_rain_more_than_n(p: Sequence[float], n: int)->float:
  
 
 #Creating a 365 array of probabilities of rain for Vancouver
+p = [random.uniform(0.1, 0.9) for _ in range(365)]
+#print (p)
+chance = prob_rain_more_than_n_normal_aprox(p, 365)
+print(chance)
