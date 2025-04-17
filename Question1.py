@@ -14,7 +14,6 @@ def prob_rain_more_than_n_normal_aprox(p: Sequence[float], n: int)->float:
 
     u = sum(p)
     variance = sum(Pi * (1 - Pi) for Pi in p)
-    print(variance)
     sigma = sqrt(variance)
     z = (n + 0.5 - u)/sigma
     result = 1.0 - (0.5*erf(z/sqrt(2)))
@@ -22,22 +21,13 @@ def prob_rain_more_than_n_normal_aprox(p: Sequence[float], n: int)->float:
     return result
 
 def prob_rain_more_than_n(p: Sequence[float], n: int)->float:
-    #First we need to determine all the possibilities in which n can be satisfied
-    # the formula is N = days! ((n! * (days-n)!)) 
-    days = 365
-    N = factorial(days) / (factorial(n) * (factorial(days - n)))
-     
-    #now determining the probability of one or more occurances
-    #if all probabilites were the same per day:
-    #   (p^k)*((1-p)^(n-k))
-    #p^k: sum of all succesfull probabilities
-    #((1-p)^(n-k)): sum of all unsuccesfull probabilities
+ 
 
-    sP_sum = sum(p) # succesfull probabilities
-    nsP = [pow(1-x,365-n) for x in p] # not successfull probabilities
-    nsP_sum = sum(nsP)
-
-    result = sP_sum*nsP_sum
+    result = 1.0 
+    p_sorted = sorted(p, reverse=True) #to get the maximum probabilities first, since we are not interested in the time period for this
+    
+    for p in p_sorted[0:n]:
+        result *= p
 
 
     return result
@@ -47,5 +37,8 @@ def prob_rain_more_than_n(p: Sequence[float], n: int)->float:
 #Creating a 365 array of probabilities of rain for Vancouver
 p = [random.uniform(0.1, 0.9) for _ in range(365)]
 #print (p)
-chance = prob_rain_more_than_n_normal_aprox(p, 365)
+chance_normal = prob_rain_more_than_n_normal_aprox(p, 100)
+chance = prob_rain_more_than_n_normal_aprox(p, 100)
 print(chance)
+print(chance_normal)
+
